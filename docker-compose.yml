@@ -1,0 +1,37 @@
+
+version: '3.8'
+services:
+  app:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+  nginx:
+    image: nginx:stable
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./frontend:/usr/share/nginx/html:ro
+      - ./assets:/usr/share/nginx/html/assets:ro
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - app
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: pelita
+      POSTGRES_PASSWORD: pelita_pass
+      POSTGRES_DB: pelita_db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+  dnsmasq:
+    image: andyshinn/dnsmasq:2.85
+    volumes:
+      - ./config/dnsmasq.conf:/etc/dnsmasq.conf:ro
+    ports:
+      - "53:53/udp"
+volumes:
+  db_data:

@@ -1,0 +1,1 @@
+This folder contains templates to deploy a mail server (Mailcow or Mailu).\nMail servers require public DNS and proper MX records for full deliverability.\nFor local/offline use, you can use these configs to accept mails on pelitaelectricalraya.tk via Docker.
